@@ -1,0 +1,16 @@
+*.log
+docs/_build/
+target/
+.env
+.venv
+env/
+venv/
+.pyre/
+uploads/
+.cache/
+transformers_cache/
+torch_cache/
+test.db
+test_*.jpg
+test_*.png
+test_*.jpeg
