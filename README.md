@@ -1,4 +1,3 @@
-markdown
 # AI-Powered Image Captioning and Search API
 
 A FastAPI-based application that provides image captioning and semantic search capabilities using Hugging Face transformers and machine learning models.
@@ -35,32 +34,37 @@ A FastAPI-based application that provides image captioning and semantic search c
 ## 🔧 Installation & Setup
 
 ### 1. Clone the Repository
-bash
+
+```bash
 git clone https://github.com/minhalawais/ai-image-captioning-api.git
 cd ai-image-captioning-api
-
+```
 
 ### 2. Create Virtual Environment
-bash
+
+```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-
+```
 
 ### 3. Install Dependencies
-bash
-pip install -r requirements.txt
 
+```bash
+pip install -r requirements.txt
+```
 
 ### 4. Environment Configuration
-bash
+
+```bash
 cp .env.example .env
 # Edit .env with your configuration
-
+```
 
 ### 5. Run the Application
-bash
-python run.py
 
+```bash
+python run.py
+```
 
 The API will be available at `http://localhost:8000`
 
@@ -72,7 +76,8 @@ The API will be available at `http://localhost:8000`
 ### Authentication Endpoints
 
 #### Register User
-http
+
+```http
 POST /auth/register
 Content-Type: application/json
 
@@ -80,67 +85,76 @@ Content-Type: application/json
   "username": "your_username",
   "password": "your_password"
 }
-
+```
 
 #### Login
-http
+
+```http
 POST /auth/token
 Content-Type: application/x-www-form-urlencoded
 
 username=your_username&password=your_password
-
+```
 
 #### Get Current User
-http
+
+```http
 GET /auth/me
 Authorization: Bearer <your_token>
-
+```
 
 ### Image Endpoints
 
 #### Upload Image
-http
+
+```http
 POST /images/upload
 Authorization: Bearer <your_token>
 Content-Type: multipart/form-data
 
 file: <image_file>
-
+```
 
 #### Search Images
-http
+
+```http
 GET /images/search?query=<search_query>&limit=3&threshold=0.0
 Authorization: Bearer <your_token>
-
+```
 
 #### Get Upload History
-http
+
+```http
 GET /images/history?limit=50&offset=0
 Authorization: Bearer <your_token>
-
+```
 
 #### Get Image Details
-http
+
+```http
 GET /images/{image_id}
 Authorization: Bearer <your_token>
-
+```
 
 #### Download Image
-http
+
+```http
 GET /images/{image_id}/download
 Authorization: Bearer <your_token>
-
+```
 
 #### Delete Image
-http
+
+```http
 DELETE /images/{image_id}
 Authorization: Bearer <your_token>
-
+```
 
 ## 💡 Usage Examples
 
 ### 1. Complete Workflow Example
-bash
+
+```bash
 # 1. Register a new user
 curl -X POST "http://localhost:8000/auth/register" \
   -H "Content-Type: application/json" \
@@ -163,96 +177,69 @@ curl -X GET "http://localhost:8000/images/search?query=cat&limit=3" \
 # 5. Get upload history
 curl -X GET "http://localhost:8000/images/history" \
   -H "Authorization: Bearer $TOKEN"
-
+```
 
 ### 2. Python Client Example
-python
+
+```python
 import requests
 
-# Base URL
 base_url = "http://localhost:8000"
 
 # Register and login
-requests.post(f"{base_url}/auth/register", 
-              json={"username": "testuser", "password": "testpass123"})
-
-response = requests.post(f"{base_url}/auth/token", 
-                        data={"username": "testuser", "password": "testpass123"})
+requests.post(f"{base_url}/auth/register", json={"username": "testuser", "password": "testpass123"})
+response = requests.post(f"{base_url}/auth/token", data={"username": "testuser", "password": "testpass123"})
 token = response.json()["access_token"]
-
 headers = {"Authorization": f"Bearer {token}"}
 
 # Upload image
 with open("image.jpg", "rb") as f:
     files = {"file": ("image.jpg", f, "image/jpeg")}
-    response = requests.post(f"{base_url}/images/upload", 
-                           files=files, headers=headers)
+    response = requests.post(f"{base_url}/images/upload", files=files, headers=headers)
     print(response.json())
 
 # Search images
-response = requests.get(f"{base_url}/images/search?query=sunset&limit=5", 
-                       headers=headers)
+response = requests.get(f"{base_url}/images/search?query=sunset&limit=5", headers=headers)
 print(response.json())
-
+```
 
 ## 🧪 Testing
 
-### Run All Tests
-bash
+```bash
+# Run all tests
 pytest tests/ -v
 
-
-### Run Specific Test Files
-bash
+# Run specific tests
 pytest tests/test_auth.py -v
 pytest tests/test_images.py -v
 pytest tests/test_ml_service.py -v
 
-
-### Run with Coverage
-bash
+# Run with coverage
 pip install pytest-cov
 pytest tests/ --cov=app --cov-report=html
-
+```
 
 ## 🐳 Docker Deployment
 
-### Build and Run
-bash
-# Build the image
+```bash
 docker build -t ai-image-api .
-
-# Run the container
 docker run -p 8000:8000 -v $(pwd)/uploads:/app/uploads ai-image-api
-
+```
 
 ## 🌐 Streamlit UI
 
-Run the optional Streamlit interface:
-bash
+```bash
 streamlit run streamlit_app.py
-
+```
 
 Access at `http://localhost:8501`
 
 ## 🚀 Live Demo with Ngrok
 
-### 1. Install Ngrok
-Download from [https://ngrok.com/download](https://ngrok.com/download)
-
-### 2. Run Your Application
-bash
+```bash
 python run.py
-
-
-### 3. Start Ngrok Tunnel
-bash
 ngrok http 8000
-
-
-### 4. Use the Provided URL
-Ngrok will provide a public URL like `https://abc123.ngrok.io`
-
+```
 
 ## 🔒 Security Features
 
@@ -267,40 +254,30 @@ Ngrok will provide a public URL like `https://abc123.ngrok.io`
 
 ### Common Issues
 
-1. **Model Download Errors**
-   - Ensure stable internet connection
-   - Check available disk space (2GB+ needed)
-
-2. **Memory Issues**
-   - Ensure 4GB+ RAM available
-   - Consider using smaller models for limited resources
-
-3. **File Upload Issues**
-   - Check file size limits in configuration
-   - Verify file permissions in upload directory
-
-4. **Authentication Issues**
-   - Verify JWT secret key configuration
-   - Check token expiration settings
+1. **Model Download Errors**: Ensure stable internet connection and at least 2GB disk space
+2. **Memory Issues**: Use machines with 4GB+ RAM or optimize model size
+3. **File Upload Issues**: Check file size limits and permissions
+4. **Authentication Issues**: Verify JWT configuration and expiration
 
 ### Logs
-Check `app.log` for detailed error information.
+
+Check `app.log` for errors
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Run the test suite
-6. Submit a pull request
+1. Fork the repository  
+2. Create a feature branch  
+3. Make your changes  
+4. Add tests  
+5. Run tests  
+6. Submit PR
 
 ## 🙏 Acknowledgments
 
-- Hugging Face for providing excellent ML models
-- FastAPI team for the amazing framework
-- Salesforce for the BLIP model
-- Sentence Transformers library
+- Hugging Face
+- FastAPI
+- Salesforce (BLIP model)
+- Sentence Transformers
 
 ---
 
