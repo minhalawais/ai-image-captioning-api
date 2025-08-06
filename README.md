@@ -35,7 +35,7 @@ A FastAPI-based application that provides image captioning and semantic search c
 
 ### 1. Clone the Repository
 \`\`\`bash
-git clone <your-repo-url>
+git clone https://github.com/minhalawais/ai-image-captioning-api.git
 cd ai-image-captioning-api
 \`\`\`
 
